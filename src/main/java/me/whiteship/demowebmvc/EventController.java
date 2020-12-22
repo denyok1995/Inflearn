@@ -2,8 +2,10 @@ package me.whiteship.demowebmvc;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.ui.ModelMap;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.bind.support.SessionStatus;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
@@ -18,8 +20,18 @@ import java.util.List;
 @SessionAttributes("event") //이름과 동일한 곳에 세션을 알아서 추가함
 public class EventController {
 
+    @InitBinder
+    public void initEventBinder(WebDataBinder webDataBinder) {
+        webDataBinder.setDisallowedFields("id"); // 받고 싶지 않은 필드값 걸러내기
+    }
+
+    @ModelAttribute
+    public void categories(Model model){
+        //model.addAttribute("categories", List.of("stydy", "hobby"));
+    }
+
     @GetMapping("/events/form/name")
-    public String eventsFormName(Model model){
+    public String eventsFormName(ModelMap model){
         model.addAttribute("event",new Event());
         return "/events/form-name";
     }
